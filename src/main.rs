@@ -1,18 +1,23 @@
 use std::thread::sleep_ms;
-use std::io::stdout;
-use std::io::Write;
+
+static PREFIX: &'static str = "\x1b[";
 
 fn main() {
-    let prefix = "\x1B[";
-    print!("{}32;1m[ ] ", prefix);
-    print!("Hello, world!");
-    stdout().flush();
+    status("Waiting for things", false);
     sleep_ms(500);
-    print!("Stuff and things");
-    stdout().flush();
+    status("Doing things", false);
     sleep_ms(500);
-    print!("More stuff");
-    stdout().flush();
-    sleep_ms(400);
-    println!("{}0G{}KMore stuff!", prefix, prefix);
+    status("Stuff is done, yo.", true);
+    sleep_ms(500);
+}
+
+fn status(msg: &str, done: bool) {
+    clear();
+    let color = if done { 32 } else { 33 };
+    let status = if done { "\u{2713}" } else { " " };
+    println!("{}{};1m[{}]{}0m {}", PREFIX, color, status, PREFIX, msg);
+}
+
+fn clear() {
+    print!("{}F{}K", PREFIX, PREFIX);
 }
