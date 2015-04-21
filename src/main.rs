@@ -9,6 +9,12 @@ fn main() {
     sleep_ms(500);
     status("Stuff is done, yo.", true);
     sleep_ms(500);
+    for times in 0..50 {
+        for i in 0..3 {
+            spin(i);
+            sleep_ms(128);
+        }
+    }
 }
 
 fn status(msg: &str, done: bool) {
@@ -20,4 +26,11 @@ fn status(msg: &str, done: bool) {
 
 fn clear() {
     print!("{}F{}K", PREFIX, PREFIX);
+}
+
+
+fn spin(i: usize) {
+    let states = vec!["-", "\\", "|", "/"];
+    clear();
+    println!(" [{}] Spinning", states[i]);
 }
