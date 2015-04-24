@@ -1,15 +1,18 @@
+extern crate term;
+
+use std::io::prelude::*;
 use std::thread::sleep_ms;
 
 static PREFIX: &'static str = "\x1b[";
 
 fn main() {
-    status("Waiting for things", false);
+    status("Starting shit.", false);
     sleep_ms(500);
     status("Doing things", false);
     sleep_ms(500);
     status("Stuff is done, yo.", true);
     sleep_ms(500);
-    for times in 0..50 {
+    for times in 0..10 {
         for i in 0..3 {
             spin(i);
             sleep_ms(128);
@@ -19,9 +22,14 @@ fn main() {
 
 fn status(msg: &str, done: bool) {
     clear();
-    let color = if done { 32 } else { 33 };
+    let color = if done { term::color::GREEN } else { term::color::YELLOW };
     let status = if done { "\u{2713}" } else { " " };
-    println!("{}{};1m[{}]{}0m {}", PREFIX, color, status, PREFIX, msg);
+
+    let mut t = term::stdout().unwrap();
+    t.fg(color).unwrap();
+    (write!(t, "[{}] {}\n", status, msg)).unwrap();
+    t.reset().unwrap();
+    (t.flush()).unwrap();
 }
 
 fn clear() {
