@@ -33,7 +33,9 @@ fn status(msg: &str, done: bool) {
 }
 
 fn clear() {
-    print!("{}F{}K", PREFIX, PREFIX);
+    let mut t = term::stdout().unwrap();
+    t.cursor_up().unwrap();
+    t.delete_line().unwrap();
 }
 
 
