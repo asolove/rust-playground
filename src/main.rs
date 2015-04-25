@@ -4,12 +4,9 @@ use std::io::prelude::*;
 use std::thread::sleep_ms;
 
 fn main() {
-    status("Starting shit.", false);
-    println!("I'm an interrupting output!");
+    status("Starting some serious shit.", false);
     sleep_ms(100);
     status("Doing things", false);
-    sleep_ms(100);
-    println!("I am also a console output that's unaware of animation stuff.");
     sleep_ms(100);
     for _times in 0..10 {
         for i in 0..3 {
@@ -34,8 +31,7 @@ fn status(msg: &str, done: bool) {
 
 fn clear() {
     let mut t = term::stdout().unwrap();
-    t.delete_line().unwrap();
-    print!("\r");
+    t.delete_line().and_then(|_| t.carriage_return()).unwrap();
 }
 
 
